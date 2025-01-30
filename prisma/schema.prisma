@@ -7,11 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Example model - you can modify this based on your needs
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  password  String @default("")
+  Links     Link[]
 } 
+model Link {
+  id        String   @id @default(uuid())
+  shortUrl String @unique
+  originalUrl String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
